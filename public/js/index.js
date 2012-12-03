@@ -29,15 +29,24 @@ var moves = [
     {name: 'Bidouille'}
 ];
 
+function resetAction() {
+    action.status = null;
+    action.player = null;
+    action.move = null;
+}
+
 function MainCtrl($scope) {
 
+    $scope.action = action;
+
     $scope.onAddClick = function() {
-        console.log('onAddClick', arguments);
-        console.warn('action', action);
         results.push(angular.copy(action));
-        if (action.success) score[0]++;
-        else score[1]++;
-        action = {};
+        score[action.status === 'success' ? 0 : 1]++;
+        resetAction();
+    };
+
+    $scope.onCancelClick = function() {
+        resetAction();
     };
 }
 
@@ -69,7 +78,7 @@ function ActionCtrl($scope) {
 
     $scope.onActionClick = function(success) {
         console.log('onActionClick', arguments);
-        action.success = !!success;
+        action.status = success ? 'success' : 'error';
     };
 }
 

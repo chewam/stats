@@ -10,28 +10,29 @@ block content
             |-
             span {{score[1]}}
 
-        div(ng:controller="ActionCtrl")
-            button.btn(ng:click="onActionClick(true)") Success
-            button.btn(ng:click="onActionClick()") Failure
+        div(ng:controller="ActionCtrl", ng:show="!action.status")
+            button.btn.btn-success(ng:click="onActionClick(true)") Success
+            button.btn.btn-danger(ng:click="onActionClick()") Failure
 
-        ul(ng:controller="PlayerListCtrl")
+        ul(ng:controller="PlayerListCtrl", ng:show="action.status && !action.player")
             li(ng:repeat="player in players", ng:click="onPlayerClick(player)")
                 {{player.name}}
 
-        ul(ng:controller="MoveListCtrl")
+        ul(ng:controller="MoveListCtrl", ng:show="action.player")
             li(ng:repeat="move in moves", ng:click="onMoveClick(move)")
                 {{move.name}}
 
-        button.btn(ng:click="onAddClick()") Add
+        button.btn(ng:click="onCancelClick()", ng:show="action.status") Cancel
+        button.btn(ng:click="onAddClick()", ng:show="action.move") Add
 
         table.table.table-striped.table-bordered.table-condensed(ng:controller="ResultListCtrl")
             thead
                 tr
-                    th Action
+                    th Status
                     th Player
                     th Move
             tbody
-                tr(ng:repeat="result in results", ng:class="{true:'success', false:'error'}[!!result.success]")
-                    td {{result.success}}
+                tr(ng:repeat="result in results", ng:class="result.status")
+                    td {{result.status}}
                     td {{result.player.name}}
                     td {{result.move.name}}
