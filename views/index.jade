@@ -1,0 +1,37 @@
+extends layout
+
+block content
+    h1= title
+
+    div(ng:controller="MainCtrl")
+
+        div(ng:controller="ScoreCtrl")
+            span {{score[0]}}
+            |-
+            span {{score[1]}}
+
+        div(ng:controller="ActionCtrl")
+            button.btn(ng:click="onActionClick(true)") Success
+            button.btn(ng:click="onActionClick()") Failure
+
+        ul(ng:controller="PlayerListCtrl")
+            li(ng:repeat="player in players", ng:click="onPlayerClick(player)")
+                {{player.name}}
+
+        ul(ng:controller="MoveListCtrl")
+            li(ng:repeat="move in moves", ng:click="onMoveClick(move)")
+                {{move.name}}
+
+        button.btn(ng:click="onAddClick()") Add
+
+        table.table.table-striped.table-bordered.table-condensed(ng:controller="ResultListCtrl")
+            thead
+                tr
+                    th Action
+                    th Player
+                    th Move
+            tbody
+                tr(ng:repeat="result in results", ng:class="{true:'success', false:'error'}[!!result.success]")
+                    td {{result.success}}
+                    td {{result.player.name}}
+                    td {{result.move.name}}
