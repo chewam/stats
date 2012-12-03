@@ -35,14 +35,43 @@ function resetAction() {
     action.move = null;
 }
 
+function getResults() {
+    var results = [];
+
+    if (window.localStorage) {
+        results = JSON.parse(localStorage.getItem('results')) || [];
+    }
+
+    return results;
+}
+
+function setResults(results) {
+    if (window.localStorage) {
+        localStorage.setItem('results', JSON.stringify(results));
+    }
+}
+
+function updateScore() {
+    score[0] = 0;
+    score[1] = 0;
+
+    for (var i = 0, l = results.length; i < l; i++) {
+        score[results[i].status === 'success' ? 0 : 1]++;
+    }
+}
+
 function MainCtrl($scope) {
 
     $scope.action = action;
 
+    results = getResults();
+    updateScore();
+
     $scope.onAddClick = function() {
         results.push(angular.copy(action));
-        score[action.status === 'success' ? 0 : 1]++;
+        updateScore();
         resetAction();
+        setResults(results);
     };
 
     $scope.onCancelClick = function() {
